@@ -107,7 +107,7 @@ RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode
 # 	&& apt-get update \
 # 	&& apt-get install --no-install-recommends --no-install-suggests -y app-protect-dos; \
 # 	fi \
-        && dpkg -i /tmp/*.deb \
+        && dpkg -i /tmp//tmp/app-protect-dos.deb.deb /tmp/nginx-plus-module-appprotectdos.deb \
 	&& apt-get purge --auto-remove -y apt-transport-https gnupg \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm /etc/apt/sources.list.d/nginx-app-protect*.list
