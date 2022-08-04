@@ -85,13 +85,14 @@ RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode
 FROM debian-plus as debian-plus-nap
 ARG NGINX_PLUS_VERSION
 ARG NAP_MODULES
-
+COPY app-protect-dos.deb /tmp/app-protect-dos.deb
+COPY nginx-plus-module-appprotectdos.deb /tmp/nginx-plus-module-appprotectdos.deb 
 RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode=0644 \
 	--mount=type=secret,id=nginx-repo.key,dst=/etc/ssl/nginx/nginx-repo.key,mode=0644 \
 # 	--mount=type=secret,id=app-protect-dos.deb,dst=/tmp/app-protect-dos.deb,mode=0755 \
-# 	--mount=type=secret,id=nginx-plus-module-appprotectdos.deb,dst=/tmp/nginx-plus-module-appprotectdos.deb,mode=0755 \
-	--mount=type=bind,from=app-protect-dos.deb,target=/tmp/ \
-	--mount=type=bind,from=nginx-plus-module-appprotectdos.deb,target=/tmp/ \
+# # 	--mount=type=secret,id=nginx-plus-module-appprotectdos.deb,dst=/tmp/nginx-plus-module-appprotectdos.deb,mode=0755 \
+# 	--mount=type=bind,from=app-protect-dos.deb,target=/tmp/ \
+# 	--mount=type=bind,from=nginx-plus-module-appprotectdos.deb,target=/tmp/ \
 	
 
 	
@@ -111,7 +112,7 @@ RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode
 # 	&& apt-get update \
 # 	&& apt-get install --no-install-recommends --no-install-suggests -y app-protect-dos; \
 # 	fi \
-        && dpkg -i /tmp/app-protect-dos.deb /tmp/nginx-plus-module-appprotectdos.deb \
+        && dpkg -i /tmp/app-protect-dos.deb && dpkg -i /tmp/nginx-plus-module-appprotectdos.deb \
 	&& apt-get purge --auto-remove -y apt-transport-https gnupg \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm /etc/apt/sources.list.d/nginx-app-protect*.list
