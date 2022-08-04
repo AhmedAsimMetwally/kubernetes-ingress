@@ -88,8 +88,12 @@ ARG NAP_MODULES
 
 RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode=0644 \
 	--mount=type=secret,id=nginx-repo.key,dst=/etc/ssl/nginx/nginx-repo.key,mode=0644 \
-	--mount=type=secret,id=app-protect-dos.deb,dst=/tmp/app-protect-dos.deb,mode=0755 \
-	--mount=type=secret,id=nginx-plus-module-appprotectdos.deb,dst=/tmp/nginx-plus-module-appprotectdos.deb,mode=0755 \
+# 	--mount=type=secret,id=app-protect-dos.deb,dst=/tmp/app-protect-dos.deb,mode=0755 \
+# 	--mount=type=secret,id=nginx-plus-module-appprotectdos.deb,dst=/tmp/nginx-plus-module-appprotectdos.deb,mode=0755 \
+	--mount=type=bind,from=app-protect-dos.deb,target=/tmp/ \
+	--mount=type=bind,from=nginx-plus-module-appprotectdos.deb,target=/tmp/ \
+	
+
 	
 	apt-get update \
 	&& apt-get install --no-install-recommends --no-install-suggests -y gnupg curl apt-transport-https \
