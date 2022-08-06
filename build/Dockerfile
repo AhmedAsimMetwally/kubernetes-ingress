@@ -105,7 +105,13 @@ RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode
 	"deb https://pkgs.nginx.com/app-protect-security-updates/debian ${DEBIAN_VERSION} nginx-plus" > /etc/apt/sources.list.d/nginx-app-protect.list \
 	&& apt-get update \
 	&& apt-get install --no-install-recommends --no-install-suggests -y app-protect app-protect-attack-signatures app-protect-threat-campaigns \
-	&& apt-get install -y curl libboost-filesystem1.65.1 libboost-iostreams1.65.1 libboost-regex1.65.1 libboost-regex1.65.1 libboost-system1.65.1 libzmq5 ; \
+# 	&& apt-get install -y curl libboost-filesystem1.65.1 libboost-iostreams1.65.1 libboost-regex1.65.1 libboost-regex1.65.1 libboost-system1.65.1 libzmq5 ; \
+	&& apt-get install -y curl apt-transport-https lsb-release ca-certificates wget gnupg2 \ 
+	&& apt-get update --allow-releaseinfo-change \
+	&& printf "deb https://pkgs.nginx.com/plus/debian `lsb_release -cs` nginx-plus\n" | sudo tee /etc/apt/sources.list.d/nginx-plus.list \
+        && printf "deb https://pkgs.nginx.com/app-protect-dos/debian `lsb_release -cs` nginx-plus\n" | sudo tee /etc/apt/sources.list.d/nginx-app-protect-dos.list \ 
+	&&  wget -P /etc/apt/apt.conf.d https://cs.nginx.com/static/files/90pkgs-nginx \ 
+	&& apt-get update \
 	fi \
 # 	&& if [ -z "${NAP_MODULES##*dos*}" ]; then \
 # 	printf "%s\n" "deb https://pkgs.nginx.com/app-protect-dos/${NGINX_PLUS_VERSION}/debian ${DEBIAN_VERSION} nginx-plus" > /etc/apt/sources.list.d/nginx-app-protect-dos.list \
