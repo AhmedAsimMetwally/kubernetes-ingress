@@ -85,17 +85,9 @@ RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode
 FROM debian-plus as debian-plus-nap
 ARG NGINX_PLUS_VERSION
 ARG NAP_MODULES
-COPY app-protect-dos.deb /tmp/app-protect-dos.deb
-COPY nginx-plus-module-appprotectdos.deb /tmp/nginx-plus-module-appprotectdos.deb 
+
 RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode=0644 \
 	--mount=type=secret,id=nginx-repo.key,dst=/etc/ssl/nginx/nginx-repo.key,mode=0644 \
-# 	--mount=type=secret,id=app-protect-dos.deb,dst=/tmp/app-protect-dos.deb,mode=0755 \
-# # 	--mount=type=secret,id=nginx-plus-module-appprotectdos.deb,dst=/tmp/nginx-plus-module-appprotectdos.deb,mode=0755 \
-# 	--mount=type=bind,from=app-protect-dos.deb,target=/tmp/ \
-# 	--mount=type=bind,from=nginx-plus-module-appprotectdos.deb,target=/tmp/ \
-	
-
-	
 	apt-get update \
 	&& apt-get install --no-install-recommends --no-install-suggests -y gnupg curl apt-transport-https \
 	&& curl -fsSL https://cs.nginx.com/static/keys/app-protect-security-updates.key | gpg --dearmor > /etc/apt/trusted.gpg.d/nginx_app_signing.gpg \
@@ -105,21 +97,15 @@ RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode
 	"deb https://pkgs.nginx.com/app-protect-security-updates/debian ${DEBIAN_VERSION} nginx-plus" > /etc/apt/sources.list.d/nginx-app-protect.list \
 	&& apt-get update \
 	&& apt-get install --no-install-recommends --no-install-suggests -y app-protect app-protect-attack-signatures app-protect-threat-campaigns \
- 	&& apt-get install -y curl libboost-filesystem1.65.1 libboost-iostreams1.65.1 libboost-regex1.65.1 libboost-regex1.65.1 libboost-system1.65.1 libzmq5 ; \
-	&& apt-get install -y curl apt-transport-https lsb-release ca-certificates wget gnupg2 \ 
-	&& apt-get update --allow-releaseinfo-change \
-# 	&& printf "deb https://pkgs.nginx.com/plus/debian `lsb_release -cs` nginx-plus\n" | sudo tee /etc/apt/sources.list.d/nginx-plus.list \
-#       && printf "deb https://pkgs.nginx.com/app-protect-dos/debian `lsb_release -cs` nginx-plus\n" | sudo tee /etc/apt/sources.list.d/nginx-app-protect-dos.list \ 
-# 	&&  wget -P /etc/apt/apt.conf.d https://cs.nginx.com/static/files/90pkgs-nginx \ 
-	apt-get update \
+	&& apt-get purge --auto-remove -y curl; \
 	fi \
-# 	&& if [ -z "${NAP_MODULES##*dos*}" ]; then \
-# 	printf "%s\n" "deb https://pkgs.nginx.com/app-protect-dos/${NGINX_PLUS_VERSION}/debian ${DEBIAN_VERSION} nginx-plus" > /etc/apt/sources.list.d/nginx-app-protect-dos.list \
-# 	&& apt-get update \
+	&& if [ -z "${NAP_MODULES##*dos*}" ]; then \
+	printf "%s\n" "deb https://pkgs.nginx.com/app-protect-dos/${NGINX_PLUS_VERSION}/debian ${DEBIAN_VERSION} nginx-plus" > /etc/apt/sources.list.d/nginx-app-protect-dos.list \
+	&& apt-get update \
 # 	&& apt-get install --no-install-recommends --no-install-suggests -y app-protect-dos; \
-# 	fi \
-        &&  apt install /tmp/nginx-plus-module-appprotectdos.deb && apt install /tmp/app-protect-dos.deb \
-	&& apt-get purge --auto-remove -y apt-transport-https gnupg \
+        && apt install -y nginx-plus-module-appprotectdos.deb app-protect-dos.deb; \
+ 	fi \
+# 	&& apt-get purge --auto-remove -y apt-transport-https gnupg \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm /etc/apt/sources.list.d/nginx-app-protect*.list
 
@@ -229,8 +215,8 @@ RUN --mount=target=/tmp [ -n "${NAP_MODULES##*waf*}" ] && exit 0; mkdir -p /etc/
 	&& cp -a /tmp/build/log-default.json /etc/nginx
 
 # run only on nap dos build
- RUN --mount=target=/tmp [ -n "${NAP_MODULES##*dos*}" ] && exit 0; mkdir -p /root/app_protect_dos /etc/nginx/dos/policies /etc/nginx/dos/logconfs /shared/cores /var/log/adm /var/run/adm \
- 	&& chmod 777 /shared/cores /var/log/adm /var/run/adm /etc/app_protect_dos
+RUN --mount=target=/tmp [ -n "${NAP_MODULES##*dos*}" ] && exit 0; mkdir -p /root/app_protect_dos /etc/nginx/dos/policies /etc/nginx/dos/logconfs /shared/cores /var/log/adm /var/run/adm \
+	&& chmod 777 /shared/cores /var/log/adm /var/run/adm /etc/app_protect_dos
 
 RUN --mount=target=/tmp mkdir -p /var/lib/nginx /etc/nginx/secrets /etc/nginx/stream-conf.d \
 	&& setcap 'cap_net_bind_service=+ep' /usr/sbin/nginx 'cap_net_bind_service=+ep' /usr/sbin/nginx-debug \
