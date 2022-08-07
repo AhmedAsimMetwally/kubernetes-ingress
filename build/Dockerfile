@@ -109,8 +109,8 @@ RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode
 	&& apt -y install --fix-broken  /tmp/libboost-iostreams1.65.1.deb \
 	&& wget -O /tmp/libboost-filesystem1.65.1.deb http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.65.1/libboost-filesystem1.65.1_1.65.1+dfsg-0ubuntu5_amd64.deb \
 	&& apt -y install --fix-broken /tmp/libboost-filesystem1.65.1.deb \ 
-	&& wget -O /tmp/libboost-regex1.65.1 http://archive.ubuntu.com/ubuntu/pool/universe/b/boost1.65.1/libboost-regex1.65.1_1.65.1+dfsg-0ubuntu5_amd64.deb \ 
-	&& apt -y install --fix-broken /tmp/libboost-regex1.65.1 \
+	&& wget -O /tmp/libboost-regex1.65.1.deb http://archive.ubuntu.com/ubuntu/pool/universe/b/boost1.65.1/libboost-regex1.65.1_1.65.1+dfsg-0ubuntu5_amd64.deb \ 
+	&& apt -y install --fix-broken /tmp/libboost-regex1.65.1.deb \
 	&& if [ -z "${NAP_MODULES##*dos*}" ]; then \
 	#printf "%s\n" "deb https://pkgs.nginx.com/app-protect-dos/${NGINX_PLUS_VERSION}/debian ${DEBIAN_VERSION} nginx-plus" > /etc/apt/sources.list.d/nginx-app-protect-dos.list \
 # 	&& apt-get update \
