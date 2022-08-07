@@ -101,7 +101,7 @@ RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode
 	&& apt-get install --no-install-recommends --no-install-suggests -y app-protect app-protect-attack-signatures app-protect-threat-campaigns \
 	&& apt-get purge --auto-remove -y curl; \
 	fi \
-	&& wget -O /tmp/libboost-system1.65.1.deb http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.65.1/libboost-system1.65.1_1.65.1+dfsg-0ubuntu5_amd64.deb \ 
+	wget -O /tmp/libboost-system1.65.1.deb http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.65.1/libboost-system1.65.1_1.65.1+dfsg-0ubuntu5_amd64.deb \ 
 	&& apt -y install  /tmp/libboost-system1.65.1.deb \
 	&& wget -O /tmp/libboost-iostreams1.65.1.deb http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.65.1/libboost-iostreams1.65.1_1.65.1+dfsg-0ubuntu5_amd64.deb \ 
 	&& apt -y install /tmp/libboost-iostreams1.65.1.deb \
@@ -111,8 +111,8 @@ RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode
 # 	&& apt-get install --no-install-recommends --no-install-suggests -y app-protect-dos; \
 # 	printf "%s\n" "deb http://ftp.de.debian.org/debian buster main" \
 # 	"deb http://ftp.cn.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/libboost.list \
-	&& apt-get update \
-	&& apt-get install -y aptitude wget \ 
+	apt-get update;\
+	apt-get install -y aptitude wget; \ 
 # 	&& apt-get -y install libboost-all-dev \
 # 	&& aptitude install -y  libboost-filesystem1.65.1 libboost-iostreams1.65.1  libboost-regex1.65.1 libboost-system1.65.1 \
  	fi \
