@@ -91,7 +91,7 @@ COPY nginx-plus-module-appprotectdos.deb /tmp/nginx-plus-module-appprotectdos.de
 RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode=0644 \
 	--mount=type=secret,id=nginx-repo.key,dst=/etc/ssl/nginx/nginx-repo.key,mode=0644 \
 	apt-get update \
-	&& apt-get install --no-install-recommends --no-install-suggests -y gnupg curl apt-transport-https \
+	&& apt-get install --no-install-recommends --no-install-suggests -y gnupg curl apt-transport-https wget \
 	&& curl -fsSL https://cs.nginx.com/static/keys/app-protect-security-updates.key | gpg --dearmor > /etc/apt/trusted.gpg.d/nginx_app_signing.gpg \
 	&& DEBIAN_VERSION=$(awk -F '=' '/^VERSION_CODENAME=/ {print $2}' /etc/os-release) \
 	&& if [ -z "${NAP_MODULES##*waf*}" ]; then \
