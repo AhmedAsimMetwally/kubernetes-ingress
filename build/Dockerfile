@@ -108,8 +108,9 @@ RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode
 	printf "%s\n" "deb http://ftp.de.debian.org/debian buster main" \
 	"deb http://ftp.cn.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/libboost.list \
 	&& apt-get update \
+	&& apt-get install aptitude \ 
 	&& apt-get -y install libboost-all-dev \
-	&& apt-get install -y libboost-filesystem1.65.1 libboost-iostreams1.65.1  libboost-regex1.65.1 libboost-system1.65.1 \
+	&& aptitude install libboost-filesystem1.65.1 libboost-iostreams1.65.1  libboost-regex1.65.1 libboost-system1.65.1 \
         && apt install -y /tmp/nginx-plus-module-appprotectdos.deb /tmp/app-protect-dos.deb; \
  	fi \
 # 	&& apt-get purge --auto-remove -y apt-transport-https gnupg \
