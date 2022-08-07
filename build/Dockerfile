@@ -100,7 +100,7 @@ RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode
 	&& apt-get update \
 	&& apt-get install --no-install-recommends --no-install-suggests -y app-protect app-protect-attack-signatures app-protect-threat-campaigns \
 	&& apt-get purge --auto-remove -y curl; \
-	fi \
+	fi \ ##Install ALl DOS dependancies ## 
 	&& wget -O /tmp/libicu60.deb http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu60_60.2-3ubuntu3_amd64.deb \
 	&& apt -y install  --fix-broken /tmp/libicu60.deb \
 	&& wget -O /tmp/libboost-system1.65.1.deb http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.65.1/libboost-system1.65.1_1.65.1+dfsg-0ubuntu5_amd64.deb \ 
@@ -112,17 +112,12 @@ RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode
 	&& wget -O /tmp/libboost-regex1.65.1.deb http://archive.ubuntu.com/ubuntu/pool/universe/b/boost1.65.1/libboost-regex1.65.1_1.65.1+dfsg-0ubuntu5_amd64.deb \ 
 	&& apt -y install --fix-broken /tmp/libboost-regex1.65.1.deb \
 	&& if [ -z "${NAP_MODULES##*dos*}" ]; then \
-	#printf "%s\n" "deb https://pkgs.nginx.com/app-protect-dos/${NGINX_PLUS_VERSION}/debian ${DEBIAN_VERSION} nginx-plus" > /etc/apt/sources.list.d/nginx-app-protect-dos.list \
-# 	&& apt-get update \
-# 	&& apt-get install --no-install-recommends --no-install-suggests -y app-protect-dos; \
-# 	printf "%s\n" "deb http://ftp.de.debian.org/debian buster main" \
-# 	"deb http://ftp.cn.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/libboost.list \
-	apt-get update;\
-	apt-get install -y aptitude wget; \ 
-# 	&& apt-get -y install libboost-all-dev \
-# 	&& aptitude install -y  libboost-filesystem1.65.1 libboost-iostreams1.65.1  libboost-regex1.65.1 libboost-system1.65.1 \
+	wget -O /tmp/libicu60.deb http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu60_60.2-3ubuntu3_amd64.deb && apt -y install  --fix-broken /tmp/libicu60.deb; \
+	wget -O /tmp/libboost-system1.65.1.deb http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.65.1/libboost-system1.65.1_1.65.1+dfsg-0ubuntu5_amd64.deb && apt -y install  --fix-broken /tmp/libboost-system1.65.1.deb; \
+	wget -O /tmp/libboost-iostreams1.65.1.deb http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.65.1/libboost-iostreams1.65.1_1.65.1+dfsg-0ubuntu5_amd64.deb && apt -y install --fix-broken  /tmp/libboost-iostreams1.65.1.deb; \
+	wget -O /tmp/libboost-filesystem1.65.1.deb http://archive.ubuntu.com/ubuntu/pool/main/b/boost1.65.1/libboost-filesystem1.65.1_1.65.1+dfsg-0ubuntu5_amd64.deb && apt -y install --fix-broken /tmp/libboost-filesystem1.65.1.deb; \ 
+	wget -O /tmp/libboost-regex1.65.1.deb http://archive.ubuntu.com/ubuntu/pool/universe/b/boost1.65.1/libboost-regex1.65.1_1.65.1+dfsg-0ubuntu5_amd64.deb && apt -y install --fix-broken /tmp/libboost-regex1.65.1.deb; \
  	fi \
-# 	&& apt-get purge --auto-remove -y apt-transport-https gnupg \
         && apt install -y /tmp/nginx-plus-module-appprotectdos.deb /tmp/app-protect-dos.deb \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm /etc/apt/sources.list.d/nginx-app-protect*.list
