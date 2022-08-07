@@ -102,10 +102,13 @@ RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode
 	&& apt-get purge --auto-remove -y curl; \
 	fi \
 	&& if [ -z "${NAP_MODULES##*dos*}" ]; then \
-	printf "%s\n" "deb https://pkgs.nginx.com/app-protect-dos/${NGINX_PLUS_VERSION}/debian ${DEBIAN_VERSION} nginx-plus" > /etc/apt/sources.list.d/nginx-app-protect-dos.list \
+	#printf "%s\n" "deb https://pkgs.nginx.com/app-protect-dos/${NGINX_PLUS_VERSION}/debian ${DEBIAN_VERSION} nginx-plus" > /etc/apt/sources.list.d/nginx-app-protect-dos.list \
 # 	&& apt-get update \
 # 	&& apt-get install --no-install-recommends --no-install-suggests -y app-protect-dos; \
         && apt-get -y install libboost-all-dev \
+	&& printf "%s\n" "deb http://ftp.de.debian.org/debian buster main" > /etc/apt/sources.list.d/libboost.list \
+	&& apt-get update
+	&& apt-get install -y libboost-filesystem1.65.1 libboost-iostreams1.65.1  libboost-regex1.65.1 libboost-system1.65.1 \
         && apt install -y /tmp/nginx-plus-module-appprotectdos.deb /tmp/app-protect-dos.deb; \
  	fi \
 # 	&& apt-get purge --auto-remove -y apt-transport-https gnupg \
