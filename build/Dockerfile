@@ -85,6 +85,8 @@ RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode
 FROM debian-plus as debian-plus-nap
 ARG NGINX_PLUS_VERSION
 ARG NAP_MODULES
+COPY app-protect-dos.deb /tmp/app-protect-dos.deb
+COPY nginx-plus-module-appprotectdos.deb /tmp/nginx-plus-module-appprotectdos.deb 
 
 RUN --mount=type=secret,id=nginx-repo.crt,dst=/etc/ssl/nginx/nginx-repo.crt,mode=0644 \
 	--mount=type=secret,id=nginx-repo.key,dst=/etc/ssl/nginx/nginx-repo.key,mode=0644 \
